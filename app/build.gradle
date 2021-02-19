@@ -1,0 +1,73 @@
+apply plugin: 'com.android.application'
+
+static def getProperty(String propertyFile, String propertyName) {
+    Properties properties = new Properties()
+    properties.load(new FileInputStream(propertyFile))
+    return properties.getProperty(propertyName)
+}
+
+static def quoted(String value) {
+    return "\"$value\""
+}
+
+android {
+
+    compileSdkVersion 30
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        applicationId "edu.cnm.deepdive.animals"
+        minSdkVersion 24
+        targetSdkVersion 30
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField 'String', 'BASE_URL',
+                quoted(getProperty("$projectDir/../../../services/animals.properties", 'base_url'))
+        buildConfigField 'String', 'API_KEY',
+                quoted(getProperty("$projectDir/../../../services/animals.properties", 'api_key'))
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
+
+    //noinspection GroovyAssignabilityCheck
+    buildFeatures {
+        //noinspection GroovyAssignabilityCheck
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+
+    //Basic Android components
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+
+    //Retrofit dependencies
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    //noinspection GradleDependency
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.14.9'
+
+    //Gson (JSON parser) library
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    //Testing Libraries
+    testImplementation 'junit:junit:4.13'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+}
