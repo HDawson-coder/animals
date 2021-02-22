@@ -7,4 +7,7 @@
     <item name="colorAccent">@color/colorAccent</item>
   </style>
 
+  <style name="AnimalSpinner" parent="TextAppearance.AppCompat.Widget.TextView.SpinnerItem">
+    <item name="android:textColor">?android:attr/colorAccent</item>
+  </style>
 </resources>
